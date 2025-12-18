@@ -1,9 +1,10 @@
 use futures::StreamExt;
 
 use chromiumoxide::browser::{Browser, BrowserConfig};
-use tokio::time::sleep;
+use log::error;
 
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main()
+-> anyhow::Result<(), Box<dyn std::error::Error>> {
     // create a `Browser` that spawns a `chromium` process running with UI (`with_head()`, headless is default)
     // and the handler that drives the websocket etc.
     let (mut browser, mut handler) = Browser::launch(
@@ -12,10 +13,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     .await?;
 
     // spawn a new task that continuously polls the handler
-    let handle = tokio::spawn(async move {
-        while let Some(h) = handler.next().await {
-            if h.is_err() {
-                break;
+    let handle = tokio::task::spawn(async move {
+        loop {
+            match handler.next().await {
+                Some(Ok(_event)) => {
+                    // Handle events if needed
+                }
+                Some(Err(e)) => {
+                    error!("Error: {:?}", e);
+                    break;
+                }
+                None => break,
             }
         }
     });
@@ -30,27 +38,34 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     page.wait_for_navigation().await?;
 
     // 等待足够长时间确保页面加载完毕
-    tokio::time::sleep(tokio::time::Duration::from_secs(3)).await;
+    tokio::time::sleep(tokio::time::Duration::from_secs(3))
+        .await;
 
     // 使用JavaScript直接设置搜索框的值并提交表单
     println!("Setting search value via JavaScript...");
     page.evaluate_expression(r#"document.querySelector('input#kw').value = 'Rust编程语言'"#)
         .await?;
     println!("Search value set");
-    
+
     println!("Clicking search button via JavaScript...");
-    page.evaluate_expression(r#"document.querySelector('input#su').click()"#)
-        .await?;
+    page.evaluate_expression(
+        r#"document.querySelector('input#su').click()"#,
+    )
+    .await?;
     println!("Search button clicked");
 
     // 等待搜索结果页面加载
     println!("Waiting for navigation...");
     page.wait_for_navigation().await?;
     println!("Navigation completed");
-    tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+    tokio::time::sleep(tokio::time::Duration::from_secs(1))
+        .await;
 
     println!("Getting page content...");
-    let html = page.content().await.expect("Failed to get page content");
+    let html = page
+        .content()
+        .await
+        .expect("Failed to get page content");
     println!("Got page content, length: {}", html.len());
 
     browser.close().await?;
