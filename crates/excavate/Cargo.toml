@@ -12,5 +12,5 @@ tokio = { workspace = true }
 futures = { workspace = true }
 
 chromiumoxide = { version = "0.8.0" }
-# very bad, it's can not compile
-headless_chrome = { version = "1.0.20" }
+# very bad, it can not compile
+#headless_chrome = { version = "1.0.20" }
