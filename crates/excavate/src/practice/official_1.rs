@@ -29,35 +29,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 等待页面加载完成
     page.wait_for_navigation().await?;
 
-    // 等待搜索框元素出现并可见，使用更长的时间
-    tokio::time::sleep(tokio::time::Duration::from_secs(3))
-        .await;
+    // 等待足够长时间确保页面加载完毕
+    tokio::time::sleep(tokio::time::Duration::from_secs(3)).await;
 
-    // 先聚焦到搜索框
-    let search_input = page
-        .find_element("input#kw")
-        .await
-        .expect("Failed to find search input");
-
-    // 单独执行每个操作，并添加适当的延迟
-    search_input.click().await?;
-    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-
-    search_input.type_str("Rust编程语言").await?;
-    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-
-    // 找到搜索按钮并点击，而不是按回车键
-    let search_button = page
-        .find_element("input#su")
-        .await
-        .expect("Failed to find search button");
-    search_button.click().await?;
+    // 使用JavaScript直接设置搜索框的值并提交表单
+    println!("Setting search value via JavaScript...");
+    page.evaluate_expression(r#"document.querySelector('input#kw').value = 'Rust编程语言'"#)
+        .await?;
+    println!("Search value set");
+    
+    println!("Clicking search button via JavaScript...");
+    page.evaluate_expression(r#"document.querySelector('input#su').click()"#)
+        .await?;
+    println!("Search button clicked");
 
     // 等待搜索结果页面加载
+    println!("Waiting for navigation...");
     page.wait_for_navigation().await?;
+    println!("Navigation completed");
     tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
 
+    println!("Getting page content...");
     let html = page.content().await.expect("Failed to get page content");
+    println!("Got page content, length: {}", html.len());
 
     browser.close().await?;
     handle.await?;
