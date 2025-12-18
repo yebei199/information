@@ -1,0 +1,18 @@
+[package]
+name = "utils"
+rust-version.workspace = true
+version.workspace = true
+edition.workspace = true
+
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+dotenvy = { workspace = true }
+
+config = "0.15.19"
+
