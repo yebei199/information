@@ -9,6 +9,8 @@ edition.workspace = true
 anyhow = { workspace = true }
 serde = { workspace = true }
 tokio = { workspace = true }
-futures={workspace = true}
+futures = { workspace = true }
 
-chromiumoxide={version = "0.8.0"}
+chromiumoxide = { version = "0.8.0" }
+# very bad, it's can not compile
+headless_chrome = { version = "1.0.20" }
