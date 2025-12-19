@@ -1,10 +1,12 @@
 use futures::StreamExt;
 
 use chromiumoxide::browser::{Browser, BrowserConfig};
-use log::error;
+use chromiumoxide::Page;
+use log::{debug, error};
 
 async fn main()
 -> anyhow::Result<(), Box<dyn std::error::Error>> {
+    utils::tools::log::init_logger();
     // create a `Browser` that spawns a `chromium` process running with UI (`with_head()`, headless is default)
     // and the handler that drives the websocket etc.
     let (mut browser, mut handler) = Browser::launch(
@@ -33,45 +35,20 @@ async fn main()
         .new_page("https://www.baidu.com")
         .await
         .expect("Failed to create page");
-
-    // 等待页面加载完成
     page.wait_for_navigation().await?;
+    let ele1 = page.find_element("#hotsearch-content-wrapper li:nth-of-type(5) a span:nth-of-type(2)").await?;
 
-    // 等待足够长时间确保页面加载完毕
-    tokio::time::sleep(tokio::time::Duration::from_secs(3))
-        .await;
-
-    // 使用JavaScript直接设置搜索框的值并提交表单
-    println!("Setting search value via JavaScript...");
-    page.evaluate_expression(r#"document.querySelector('input#kw').value = 'Rust编程语言'"#)
-        .await?;
-    println!("Search value set");
-
-    println!("Clicking search button via JavaScript...");
-    page.evaluate_expression(
-        r#"document.querySelector('input#su').click()"#,
-    )
-    .await?;
-    println!("Search button clicked");
-
-    // 等待搜索结果页面加载
-    println!("Waiting for navigation...");
-    page.wait_for_navigation().await?;
-    println!("Navigation completed");
-    tokio::time::sleep(tokio::time::Duration::from_secs(1))
-        .await;
-
-    println!("Getting page content...");
-    let html = page
-        .content()
+    let html = ele1
+        .inner_text()
         .await
-        .expect("Failed to get page content");
-    println!("Got page content, length: {}", html.len());
-
+        .expect("Failed to get element text")
+        .expect("Failed to get element text");
+    debug!("hhh{}", html);
     browser.close().await?;
     handle.await?;
     Ok(())
 }
+
 #[cfg(test)]
 mod test {
     use super::*;
