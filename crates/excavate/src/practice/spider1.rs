@@ -3,6 +3,7 @@ use spider::features::chrome_common::RequestInterceptConfiguration;
 use spider::website::Website;
 
 async fn main() {
+    let _ = env_logger::builder().filter_level(log::LevelFilter::Info).try_init();
     let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
     let mut website = Website::new(url);
 
@@ -10,6 +11,7 @@ async fn main() {
         RequestInterceptConfiguration::new(true);
 
     website.configuration
+        .with_respect_robots_txt(false)
         .with_chrome_intercept(intercept_conf, &None)
         .with_stealth(true) // 绕过 WebDriver 检测
         .with_wait_for_delay(Some(spider::features::chrome_common::WaitForDelay::new(Some(std::time::Duration::from_secs(1)))))
