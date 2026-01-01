@@ -55,8 +55,12 @@ dotenvy = "0.15.7"
 log = "0.4.29"
 env_logger = "0.11.8"
 sea-orm = { version = "2.0.0-rc.27" }
+sea-orm-migration = { version = "2.0.0-rc.27", features = [
+  "sqlx-postgres",
+  "runtime-tokio-rustls",
+] }
 scraper = "0.25.0"
-rand = "0.10.0-rc.5"
+rand = "0.9.2"
 
 [workspace.dependencies.spider]
 git = "https://github.com/yebei199/spider.git"
