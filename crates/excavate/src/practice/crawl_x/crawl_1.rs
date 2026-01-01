@@ -34,55 +34,33 @@ struct ParseHtml {
     meta_selector: Selector,
 }
 impl ParseHtml {
-    async fn muti_url_parse(
-        urls: Vec<String>,
-    ) -> anyhow::Result<Vec<Model>> {
-        use futures::stream::{self, StreamExt};
-
-        let mut results = Vec::new();
-        let parsers = urls.into_iter().map(ParseHtml::new);
-
-        let mut stream = stream::iter(parsers)
-            .map(|parser| async move {
-                parser.parse_html().await
-            })
-            .buffer_unordered(10);
-
-        while let Some(result) = stream.next().await {
-            let items = result?;
-            results.extend(items);
-        }
-
-        Ok(results)
-    }
-
     fn new(url: String) -> Self {
         Self {
             url,
             user_card_selector: Selector::parse(
                 "article.user-card",
             )
-            .unwrap(),
+                .unwrap(),
             name_selector: Selector::parse("h2.user-name")
                 .unwrap(),
             handle_selector: Selector::parse(
                 "div.user-handle",
             )
-            .unwrap(),
+                .unwrap(),
             id_selector: Selector::parse("div.user-id")
                 .unwrap(),
             profile_url_selector: Selector::parse(
                 ".user-avatar-wrap a",
             )
-            .unwrap(),
+                .unwrap(),
             avatar_selector: Selector::parse(
                 "img.user-avatar",
             )
-            .unwrap(),
+                .unwrap(),
             meta_selector: Selector::parse(
                 "div.user-meta span",
             )
-            .unwrap(),
+                .unwrap(),
         }
     }
     async fn parse_html(
@@ -189,6 +167,7 @@ impl ParseHtml {
 }
 struct EndToDB;
 impl EndToDB {
+    /// End of the crawl task
     async fn end() -> anyhow::Result<()> {
         dotenvy::dotenv().ok();
         let database_url = std::env::var("PG_DB").expect("PG_DB must be set");
