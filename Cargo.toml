@@ -22,18 +22,18 @@ incremental = true
 opt-level = 0
 
 [profile.dev.package."*"]
-opt-level = 1           # 所有的依赖库（如 Polars）：稍微优化，防止运行太慢
+opt-level = 1 # 所有的依赖库（如 Polars）：稍微优化，防止运行太慢
 
 [profile.test]
-inherits = "dev"        # test 自动继承上述“自己快编、依赖快跑”的策略
+inherits = "dev" # test 自动继承上述“自己快编、依赖快跑”的策略
 
 [profile.release]
 incremental = false
-opt-level = 3           # 优化级别，值越大越优化，3 是最大优化
-debug = true            # 保留调试信息，以便显示完整的错误信息
-split-debuginfo = "packed"  # 如果需要调试符号，可以配置此项
-lto = "thin"              # 开启链接时优化，通常会提高性能
-panic = "unwind"        # 保留堆栈信息，避免panic时直接终止
+opt-level = 3              # 优化级别，值越大越优化，3 是最大优化
+debug = true               # 保留调试信息，以便显示完整的错误信息
+split-debuginfo = "packed" # 如果需要调试符号，可以配置此项
+lto = "thin"               # 开启链接时优化，通常会提高性能
+panic = "unwind"           # 保留堆栈信息，避免panic时直接终止
 codegen-units = 1
 
 [dependencies]
@@ -45,6 +45,7 @@ utils = { path = "crates/utils" }
 
 anyhow = "1.0.100"
 tokio = { version = "1.48.0", features = ["full"] }
+reqwest = { version = "0.13.1", features = ["json"] }
 chrono = "0.4.42"
 chrono-tz = "0.10.4"
 getset = "0.1.6"
@@ -53,16 +54,19 @@ futures = "0.3.31"
 dotenvy = "0.15.7"
 log = "0.4.29"
 env_logger = "0.11.8"
+sea-orm = { version = "2.0.0-rc.27" }
+scraper = "0.25.0"
+rand = "0.10.0-rc.5"
 
 [workspace.dependencies.spider]
 git = "https://github.com/yebei199/spider.git"
-#branch = "fix#342"
+
+
 branch = "dev"
 features = [
-    "chrome", # 开启浏览器模拟 (CDP)
-    "chrome_stealth", # 开启指纹防检测
-    "smart", # 开启智能模式：自动在 HTTP 和 Chrome 之间切换
-    "regex", # 高效的 URL 匹配
-    "ua_generator"     # 自动生成随机 User-Agent
+  "chrome",         # 开启浏览器模拟 (CDP)
+  "chrome_stealth", # 开启指纹防检测
+  "smart",          # 开启智能模式：自动在 HTTP 和 Chrome 之间切换
+  "regex",          # 高效的 URL 匹配
+  "ua_generator",   # 自动生成随机 User-Agent
 ]
-

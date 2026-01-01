@@ -11,14 +11,18 @@ utils = { workspace = true }
 anyhow = { workspace = true }
 serde = { workspace = true }
 tokio = { workspace = true }
+reqwest.workspace = true
 futures = { workspace = true }
 log = { workspace = true }
 env_logger = { workspace = true }
 spider.workspace = true
+sea-orm.workspace = true
+scraper.workspace = true
+dotenvy.workspace = true
+rand.workspace = true
 
 
 #chromiumoxide = { git = "https://github.com/mattsse/chromiumoxide", rev = "c671c3beaa3a1a3c689409728f2afc72a0adc7b3" }
 chromiumoxide = { version = "0.8.0", features = [] }
 # very bad, it can not compile
 #headless_chrome = { version = "1.0.20" }
-
