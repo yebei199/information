@@ -63,14 +63,13 @@ scraper = "0.25.0"
 rand = "0.9.2"
 
 [workspace.dependencies.spider]
-git = "https://github.com/yebei199/spider.git"
-
-
-branch = "dev"
+git = "https://github.com/spider-rs/spider.git"
+branch = "main"
 features = [
   "chrome",         # 开启浏览器模拟 (CDP)
   "chrome_stealth", # 开启指纹防检测
   "smart",          # 开启智能模式：自动在 HTTP 和 Chrome 之间切换
   "regex",          # 高效的 URL 匹配
   "ua_generator",   # 自动生成随机 User-Agent
+  "chrome_headed",
 ]
