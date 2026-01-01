@@ -17,24 +17,25 @@ edition = "2024"
 name = "example1"
 path = "example/lib_1.rs"
 
+[profile.release]
+opt-level = 3           # 优化级别，值越大越优化，3 是最大优化
+debug = true            # 保留调试信息，以便显示完整的错误信息
+split-debuginfo = "packed"  # 如果需要调试符号，可以配置此项
+lto = true              # 开启链接时优化，通常会提高性能
+panic = "unwind"        # 保留堆栈信息，避免panic时直接终止
+
+[profile.dev]
+opt-level = 0
+
+[profile.dev.package."*"]
+opt-level = 1           # 所有的依赖库（如 Polars）：稍微优化，防止运行太慢
+
+[profile.test]
+inherits = "dev"        # test 自动继承上述“自己快编、依赖快跑”的策略
+
 [dependencies]
 anyhow = { workspace = true }
 tokio = { workspace = true }
-
-[profile.dev]
-opt-level = 2
-
-# Enable a large amount of optimization in the dev profile for dependencies.
-[profile.dev.package."*"]
-opt-level = 2
-debug = false
-
-[profile.test]
-inherits = "dev"
-
-[profile.test.package."*"]
-opt-level = 2
-debug = false
 
 [workspace.dependencies]
 utils = { path = "crates/utils" }
@@ -49,4 +50,11 @@ futures = "0.3.31"
 dotenvy = "0.15.7"
 log = "0.4.29"
 env_logger = "0.11.8"
+spider = { version = "2", features = [
+    "chrome", # 开启浏览器模拟 (CDP)
+    "chrome_stealth", # 开启指纹防检测
+    "smart", # 开启智能模式：自动在 HTTP 和 Chrome 之间切换
+    "regex", # 高效的 URL 匹配
+    "ua_generator"     # 自动生成随机 User-Agent
+] }
 
