@@ -3004,8 +3004,7 @@ dependencies = [
 [[package]]
 name = "spider"
 version = "2.38.110"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3b5580e3c162dd6c427a2d35a55e98c9f0eb766f420398d2c78f4266af85b62"
+source = "git+https://github.com/yebei199/spider.git?branch=dev#3728034901beb688240ef5d492f1abc19feb182e"
 dependencies = [
  "ahash",
  "aho-corasick",
