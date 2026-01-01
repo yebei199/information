@@ -2,7 +2,9 @@ set shell := ["fish", "-c"]
 set dotenv-load := true
 set export := true
 
-# 在当前目录下，清理所有非当前环境的构建产物
+check:
+    cargo check
+
 clean:
     cargo sweep --time 0 .
 

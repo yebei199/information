@@ -1,6 +1,7 @@
 use anyhow::Result;
 use spider::features::chrome_common::RequestInterceptConfiguration;
 use spider::website::Website;
+use tokio::time::sleep;
 
 pub struct JobSpider;
 
@@ -10,7 +11,7 @@ impl JobSpider {
         // 使用链式调用构建 website 实例
         let mut website: Website = Website::new(url)
             .with_limit(5)
-            .with_chrome_intercept(RequestInterceptConfiguration::new(true) )
+            .with_chrome_intercept(RequestInterceptConfiguration::new(true))
             .with_stealth(true)
             .with_user_agent(Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"))
             .build()
@@ -29,6 +30,7 @@ impl JobSpider {
                     html.len(),
                     html.as_str()
                 );
+                sleep(std::time::Duration::from_secs(10)).await;
 
                 if html.contains("用户受限")
                     || html.contains("security-check")
@@ -55,7 +57,7 @@ impl JobSpider {
         let links = website.get_all_links_visited().await;
 
         println!(
-            "\n抓取完成！URL: {} | 总耗时: {:?} | 总访问页数: מד {}",
+            "\n抓取完成！URL: {} | 总耗时: {:?} | 总访问页数: {}",
             url,
             duration,
             links.len()
@@ -66,8 +68,8 @@ impl JobSpider {
 }
 
 async fn main() -> Result<()> {
-    let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
-    // let url = "https://www.zhihu.com";
+    // let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
+    let url = "https://www.zhihu.com";
     JobSpider::crawl_website(url).await
 }
 
