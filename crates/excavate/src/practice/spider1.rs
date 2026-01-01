@@ -1,50 +1,20 @@
 use anyhow::Result;
 use spider::features::chrome_common::RequestInterceptConfiguration;
 use spider::website::Website;
-use std::env;
-use std::path::Path;
 
 pub struct JobSpider;
 
 impl JobSpider {
-    /// 环境初始化：自动检测 Chrome 路径
-    pub fn setup_environment() {
-        let _ = env_logger::builder()
-            .filter_level(log::LevelFilter::Info)
-            .try_init();
-
-        if env::var("CHROME_BIN").is_err() {
-            let possible_paths = [
-                "/run/current-system/sw/bin/google-chrome-stable",
-                "/usr/bin/google-chrome-stable",
-            ];
-            for path in possible_paths {
-                if Path::new(path).exists() {
-                    // SAFETY: 初始化阶段设置环境变量
-                    unsafe {
-                        env::set_var("CHROME_BIN", path);
-                    }
-                    println!(
-                        "已自动设置 Chrome 路径: {}",
-                        path
-                    );
-                    break;
-                }
-            }
-        }
-    }
-
     /// 按照官方示例模式执行抓取
     pub async fn crawl_website(url: &str) -> Result<()> {
         // 使用链式调用构建 website 实例
-        // 注意：根据 spider v2 签名，with_chrome_intercept 通常需要两个参数
         let mut website: Website = Website::new(url)
             .with_limit(10)
             .with_chrome_intercept(RequestInterceptConfiguration::new(true) )
             .with_stealth(true)
             .with_user_agent(Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"))
             .build()
-            .unwrap();
+            .expect("build the website fail");
 
         // 订阅抓取结果频道
         let mut rx2 = website.subscribe(16).unwrap();
@@ -54,9 +24,10 @@ impl JobSpider {
             while let Ok(page) = rx2.recv().await {
                 let html = page.get_html();
                 println!(
-                    "收到页面: {:?} | 长度:מד {}",
+                    "收到页面: {:?} | 长度:מד {}\n{}",
                     page.get_url(),
-                    html.len()
+                    html.len(),
+                    html.as_str()
                 );
 
                 if html.contains("用户受限")
@@ -95,8 +66,8 @@ impl JobSpider {
 }
 
 async fn main() -> Result<()> {
-    JobSpider::setup_environment();
-    let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
+    // let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
+    let url = "https://www.zhihu.com";
     JobSpider::crawl_website(url).await
 }
 
