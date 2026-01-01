@@ -1,7 +1,7 @@
 use anyhow::Result;
-use spider::features::chrome_common::RequestInterceptConfiguration;
+use spider::features::chrome_common::{RequestInterceptConfiguration, WaitForDelay};
 use spider::website::Website;
-use tokio::time::sleep;
+use std::time::Duration;
 
 pub struct JobSpider;
 
@@ -12,6 +12,7 @@ impl JobSpider {
         let mut website: Website = Website::new(url)
             .with_limit(5)
             .with_chrome_intercept(RequestInterceptConfiguration::new(true))
+            .with_wait_for_delay(Some(WaitForDelay::new(Some(Duration::from_secs(10))))) // 暂停/等待 10 秒
             .with_stealth(true)
             .with_user_agent(Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"))
             .build()
@@ -30,7 +31,6 @@ impl JobSpider {
                     html.len(),
                     html.as_str()
                 );
-                sleep(std::time::Duration::from_secs(10)).await;
 
                 if html.contains("用户受限")
                     || html.contains("security-check")
