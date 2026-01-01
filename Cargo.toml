@@ -17,14 +17,8 @@ edition = "2024"
 name = "example1"
 path = "example/lib_1.rs"
 
-[profile.release]
-opt-level = 3           # 优化级别，值越大越优化，3 是最大优化
-debug = true            # 保留调试信息，以便显示完整的错误信息
-split-debuginfo = "packed"  # 如果需要调试符号，可以配置此项
-lto = true              # 开启链接时优化，通常会提高性能
-panic = "unwind"        # 保留堆栈信息，避免panic时直接终止
-
 [profile.dev]
+incremental = true
 opt-level = 0
 
 [profile.dev.package."*"]
@@ -32,6 +26,15 @@ opt-level = 1           # 所有的依赖库（如 Polars）：稍微优化，�
 
 [profile.test]
 inherits = "dev"        # test 自动继承上述“自己快编、依赖快跑”的策略
+
+[profile.release]
+incremental = false
+opt-level = 3           # 优化级别，值越大越优化，3 是最大优化
+debug = true            # 保留调试信息，以便显示完整的错误信息
+split-debuginfo = "packed"  # 如果需要调试符号，可以配置此项
+lto = "thin"              # 开启链接时优化，通常会提高性能
+panic = "unwind"        # 保留堆栈信息，避免panic时直接终止
+codegen-units = 1
 
 [dependencies]
 anyhow = { workspace = true }
@@ -53,6 +56,7 @@ env_logger = "0.11.8"
 
 [workspace.dependencies.spider]
 git = "https://github.com/yebei199/spider.git"
+#branch = "fix#342"
 branch = "dev"
 features = [
     "chrome", # 开启浏览器模拟 (CDP)

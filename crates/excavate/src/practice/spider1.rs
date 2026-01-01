@@ -9,7 +9,7 @@ impl JobSpider {
     pub async fn crawl_website(url: &str) -> Result<()> {
         // 使用链式调用构建 website 实例
         let mut website: Website = Website::new(url)
-            .with_limit(10)
+            .with_limit(5)
             .with_chrome_intercept(RequestInterceptConfiguration::new(true) )
             .with_stealth(true)
             .with_user_agent(Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"))
@@ -66,8 +66,8 @@ impl JobSpider {
 }
 
 async fn main() -> Result<()> {
-    // let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
-    let url = "https://www.zhihu.com";
+    let url = "https://www.zhipin.com/web/geek/jobs?city=101280100&query=rust%E5%BC%80%E5%8F%91";
+    // let url = "https://www.zhihu.com";
     JobSpider::crawl_website(url).await
 }
 
