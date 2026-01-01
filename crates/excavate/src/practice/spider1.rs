@@ -36,7 +36,10 @@ impl JobSpider {
                     unsafe {
                         env::set_var("CHROME_BIN", path);
                     }
-                    println!("已自动设置 Chrome 路径: {}", path);
+                    println!(
+                        "已自动设置 Chrome 路径: {}",
+                        path
+                    );
                     break;
                 }
             }
@@ -44,7 +47,8 @@ impl JobSpider {
     }
 
     pub fn configure(&mut self) {
-        let intercept_conf = RequestInterceptConfiguration::new(true);
+        let intercept_conf =
+            RequestInterceptConfiguration::new(true);
 
         self.website
             .configuration
@@ -52,7 +56,7 @@ impl JobSpider {
             .with_chrome_intercept(intercept_conf, &None)
             .with_stealth(true) // 绕过 WebDriver 检测
             .with_wait_for_delay(Some(spider::features::chrome_common::WaitForDelay::new(
-                Some(Duration::from_secs(1)),
+                Some(Duration::from_secs(6)),
             )))
             .with_user_agent(Some("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")); // 模拟真实 UA
     }
@@ -66,19 +70,30 @@ impl JobSpider {
     fn process_results(&self) {
         if let Some(pages) = self.website.get_pages() {
             if pages.is_empty() {
-                println!("列表为空，尝试直接访问第一页内容...");
+                println!(
+                    "列表为空，尝试直接访问第一页内容..."
+                );
             } else {
                 for page in pages {
                     let html = page.get_html();
-                    if html.contains("用户受限") || html.contains("security-check") {
-                        let preview_len = 200.min(html.len());
+                    if html.contains("用户受限")
+                        || html.contains("security-check")
+                    {
+                        let preview_len =
+                            200.min(html.len());
                         println!(
                             "失败：触发了 IP 封禁或验证码。内容片段: {}",
                             &html[..preview_len]
                         );
                     } else {
-                        println!("成功获取！URL: {}", page.get_url());
-                        println!("HTML 长度: {}", html.len());
+                        println!(
+                            "成功获取！URL: {}",
+                            page.get_url()
+                        );
+                        println!(
+                            "HTML 长度: {}",
+                            html.len()
+                        );
                     }
                 }
             }
