@@ -45,7 +45,7 @@ impl JobSpider {
 
         // 3. 构建 Website 实例
         let mut website: Website = Website::new(url)
-            .with_limit(2) // 限制抓取页面数量
+            .with_limit(1) // 限制抓取页面数量
             .with_chrome_intercept(RequestInterceptConfiguration::new(true))
             .with_viewport(Some(Viewport::new(1920, 1080))) // 设置桌面级窗口
             .with_event_tracker(Some(tracker))
