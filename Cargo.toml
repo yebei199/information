@@ -44,9 +44,9 @@ tokio = { workspace = true }
 utils = { path = "crates/utils" }
 
 anyhow = "1.0.100"
-tokio = { version = "1.48.0", features = ["full"] }
+tokio = { version = "1.49.0", features = ["full"] }
 reqwest = { version = "0.13.1", features = ["json"] }
-chrono = "0.4.42"
+chrono = "0.4.43"
 chrono-tz = "0.10.4"
 getset = "0.1.6"
 serde = { version = "1.0.228", features = ["derive"] }
@@ -54,8 +54,8 @@ futures = "0.3.31"
 dotenvy = "0.15.7"
 log = "0.4.29"
 env_logger = "0.11.8"
-sea-orm = { version = "2.0.0-rc.27" }
-sea-orm-migration = { version = "2.0.0-rc.27", features = [
+sea-orm = { version = "2.0.0-rc.30" }
+sea-orm-migration = { version = "2.0.0-rc.30", features = [
   "sqlx-postgres",
   "runtime-tokio-rustls",
 ] }

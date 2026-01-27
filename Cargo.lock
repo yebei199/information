@@ -599,9 +599,9 @@ dependencies = [
 
 [[package]]
 name = "chrono"
-version = "0.4.42"
+version = "0.4.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "145052bdd345b87320e369255277e3fb5152762ad123a901ef5c262dd38fe8d2"
+checksum = "fac4744fb15ae8337dc853fee7fb3f4e48c0fbaa23d0afe49c447b4fab126118"
 dependencies = [
  "iana-time-zone",
  "js-sys",
@@ -3499,9 +3499,9 @@ dependencies = [
 
 [[package]]
 name = "sea-orm"
-version = "2.0.0-rc.27"
+version = "2.0.0-rc.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "25c0efc234bdf1f073cc9b448da21a22ed0ac7ff0958a0b3bc4994041dc059df"
+checksum = "f4bb965a287ae073c738851c5d38037ac6da66c9841ac1de7c13c8d08862180a"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -3531,9 +3531,9 @@ dependencies = [
 
 [[package]]
 name = "sea-orm-cli"
-version = "2.0.0-rc.27"
+version = "2.0.0-rc.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f50ae78e4442db69930949a8bcf3b82b0e992c8ea389ae2b1d80504029adab5d"
+checksum = "78e98371444bce42bd3f61b46a14de270e9e923a3f40889edba52f1623b4cf75"
 dependencies = [
  "chrono",
  "clap",
@@ -3551,11 +3551,12 @@ dependencies = [
 
 [[package]]
 name = "sea-orm-macros"
-version = "2.0.0-rc.27"
+version = "2.0.0-rc.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35b6ce0ae263925930d4e0f95e24a5a8b069dccc61a1ef68da26338470d94929"
+checksum = "b3e208f041129ad7962b6951f0b392e9ff97a8337bd8c7022c61e7b02ab29fe0"
 dependencies = [
  "heck 0.5.0",
+ "itertools",
  "pluralizer",
  "proc-macro2",
  "quote",
@@ -3566,9 +3567,9 @@ dependencies = [
 
 [[package]]
 name = "sea-orm-migration"
-version = "2.0.0-rc.27"
+version = "2.0.0-rc.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "433fa69cd3f8dc754a2dc51106aee10262fec84ac5195ff7d9966dd1c0d467bd"
+checksum = "45f6d4fda5c02f2cdee10062b260dc808691ceb122e1d5f7dd463695173b6f03"
 dependencies = [
  "async-trait",
  "clap",
@@ -3582,9 +3583,9 @@ dependencies = [
 
 [[package]]
 name = "sea-query"
-version = "1.0.0-rc.29"
+version = "1.0.0-rc.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93948054fb2d208555a96d03d2c887591deb42ffe3210eedbd8a3234c6fb6d34"
+checksum = "c6a067a2f6f13250f615f0bedb5bc3a6c872fec70776d0b43b43caeaa699e232"
 dependencies = [
  "chrono",
  "inherent",
@@ -3598,9 +3599,9 @@ dependencies = [
 
 [[package]]
 name = "sea-query-derive"
-version = "1.0.0-rc.11"
+version = "1.0.0-rc.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "365d236217f5daa4f40d3c9998ff3921351b53472da50308e384388162353b3a"
+checksum = "8d88ad44b6ad9788c8b9476b6b91f94c7461d1e19d39cd8ea37838b1e6ff5aa8"
 dependencies = [
  "darling",
  "heck 0.4.1",
@@ -3612,17 +3613,12 @@ dependencies = [
 
 [[package]]
 name = "sea-query-sqlx"
-version = "0.8.0-rc.11"
+version = "0.8.0-rc.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "693f3ac3a10a228afaf3512b122cffc07c57b4269d233c7ff60571ebb4f0dd17"
+checksum = "e4377164b09a11bb692dec6966eb0e6908d63d768defef0be689b39e02cf8544"
 dependencies = [
- "chrono",
- "rust_decimal",
  "sea-query",
- "serde_json",
  "sqlx",
- "time",
- "uuid",
 ]
 
 [[package]]
@@ -4639,9 +4635,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.48.0"
+version = "1.49.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff360e02eab121e0bc37a2d3b4d4dc622e6eda3a8e5253d5435ecf5bd4c68408"
+checksum = "72a2903cd7736441aac9df9d7688bd0ce48edccaadf181c3b90be801e81d3d86"
 dependencies = [
  "bytes",
  "libc",
